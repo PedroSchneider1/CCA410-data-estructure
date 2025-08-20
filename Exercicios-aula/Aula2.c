@@ -152,12 +152,31 @@ void enqueue(int valor, Fila *fila){
     if (fila->tail == NULL && fila->head == NULL){
         fila->head = nova;
         fila->tail = nova;
-        fila->qtde++;
     } else{
-        nova->anterior = fila->head;
-        fila->head->proximo = nova;
-        fila->qtde++;
+        fila->tail->proximo = nova;
+        nova->anterior = fila->tail;
+        fila->tail = nova;
     }
+    fila->qtde++;
+}
+
+void dequeue(Fila *fila){
+    if (fila->qtde == 0 || fila->head == NULL) {
+        return;
+    }
+
+    Celula *temp = fila->head;
+
+    if (fila->head == fila->tail) {
+        fila->head = NULL;
+        fila->tail = NULL;
+    } else {
+        fila->head = fila->head->proximo;
+        fila->head->anterior = NULL;
+    }
+
+    free(temp);
+    fila->qtde--;
 }
 
 int main(int argc, char const *argv[])
@@ -167,9 +186,14 @@ int main(int argc, char const *argv[])
     for (size_t i = 0; i < 9; i++)
     {
         enqueue(i, fila);
+        imprimir(fila);
     }
-
-    imprimir(fila);
+    
+    for (size_t i = 0; i < 9; i++)
+    {
+        dequeue(fila);
+        imprimir(fila);
+    }    
 
     return 0;
 }
