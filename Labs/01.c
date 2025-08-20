@@ -37,19 +37,22 @@ void inserir(LDDE *lista, int valor) {
         atual = atual->proximo;
     }
     if(anterior == NULL){
-        nova->anterior = lista->primeiro;
+        nova->proximo = lista->primeiro;
         lista->primeiro = nova;
-    }else if(atual == NULL){
-		nova->proximo = atual->anterior;
-		nova->anterior = lista->primeiro;
-		lista->primeiro = nova;
-	}else{
-        anterior->proximo = nova->anterior;
-        nova->proximo = atual->anterior;
-    }
+		if(lista->qtde > 0)
+			atual->anterior = nova;
+	}else if (atual == NULL){
+		anterior->proximo = nova;
+		nova->anterior = anterior;
+	}
+	else{
+		anterior->proximo = nova;
+		nova->anterior = anterior;
+		nova->proximo = atual;
+		atual->anterior = nova;
+	}
     lista->qtde++;
 }
-
 
 void imprimir_crescente(LDDE *lista){
 	Celula *atual = lista->primeiro;
@@ -84,11 +87,9 @@ Celula *buscar(LDDE *lista, int valor){
 }
 
 void remover(LDDE *lista, int valor) {
-        Celula *anterior = NULL;
     Celula *atual = lista->primeiro;
 
     while(atual != NULL && atual->valor != valor){
-        anterior = atual;
         atual = atual->proximo;
     }
 
@@ -96,11 +97,16 @@ void remover(LDDE *lista, int valor) {
         return;
     }
 
-    if(anterior == NULL){
+    if(atual->anterior == NULL){
         lista->primeiro = atual->proximo;
-    } else{
-        anterior->proximo = atual->proximo;
+		if (atual->proximo != NULL)
+			atual->proximo->anterior = NULL;
     }
+	else{
+		atual->anterior->proximo = atual->proximo;
+		if(atual->proximo != NULL)
+			atual->proximo->anterior = atual->anterior;
+	}
     free(atual);
     lista->qtde--;
 }
@@ -116,10 +122,10 @@ int main(void) {
 		imprimir_crescente(lista);
 		imprimir_decrescente(lista);
 	}
-	// for(int j = 0; j < len_out; j++){
-	// 	remover(lista, out[j]);
-	// 	imprimir_crescente(lista);
-	// 	imprimir_decrescente(lista);
-	// }
+	for(int j = 0; j < len_out; j++){
+		remover(lista, out[j]);
+		imprimir_crescente(lista);
+		imprimir_decrescente(lista);
+	}
   return 0;
 }
