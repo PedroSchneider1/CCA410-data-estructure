@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <math.h>
 
 typedef struct Heap
 {
@@ -11,10 +12,9 @@ typedef struct Heap
 
 void swap(int* a, int* b)
 {
-    *a = *a ^ *b;
-    *b = *a ^ *b;
-    *a = *a ^ *b;
-
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 Heap *create_heap(int n){
@@ -40,6 +40,19 @@ void heapify(Heap *h, int i){
     }
 }
 
+void heapify_up(Heap *h, int i){
+    if (h->size <= 0)
+        return;
+
+    int father = (i-1)/2;
+
+    // corrige o heap se violou a regra
+    if(h->values[father] < h->values[i]) {
+        swap(&h->values[i], &h->values[father]);
+        heapify_up(h, father);
+    }
+}
+
 void build_heap(Heap *h){
     for (int i = (h->size - 1) / 2; i >= 0; i--)
         heapify(h, i);
@@ -55,11 +68,7 @@ void insert(Heap *h, int value){
     int i = h->size - 1;
     h->values[i] = value;
 
-    // corrige o heap se violou a regra
-    while (i != 0 && h->values[(i - 1) / 2] < h->values[i]) {
-        swap(&h->values[i], &h->values[(i - 1) / 2]);
-        i = (i - 1) / 2;
-    }
+    heapify_up(h, i);
 }
 
 int extract_max(Heap *h){
@@ -113,5 +122,7 @@ int main(int argc, char const *argv[])
     printf("\nExtraindo o maximo: %d\n", extract_max(heap));
     printf("Heap depois de extrair o maximo:\n");
     print_heap(heap);
+
+    free(heap);
     return 0;
 }
