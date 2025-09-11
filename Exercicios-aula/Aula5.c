@@ -39,11 +39,32 @@ TreeNode* find_max(TreeNode* node) {
     return node;
 }
 
-TreeNode* remove(TreeNode* root, int value){
+TreeNode* remove_value(TreeNode* root, int value){
     if (root == NULL)
         return NULL;
 
-    
+    // procura o valor na arvore
+    if (value < root->value) {
+        root->left = remove_value(root->left, value);
+    } else if (value > root->value) {
+        root->right = remove_value(root->right, value);
+    } else {
+        // remove o valor
+        if (root->left == NULL) {
+            TreeNode* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            TreeNode* temp = root->left;
+            free(root);
+            return temp;
+        } else {
+            TreeNode* temp = find_max(root->left);
+            root->value = temp->value;
+            root->left = remove_value(root->left, temp->value);
+        }
+    }
+    return root;
 }
 
 TreeNode* create_tree(int* n) {
@@ -74,10 +95,15 @@ int main(int argc, char const *argv[])
     printf("Array original: ");
     print_order(t);
 
-    insert(t, 15);
-    
     printf("\nArray apos inserir 15: ");
+    insert(t, 15);
     print_order(t);
+
+    printf("\nArray apos remover 7: ");
+    remove_value(t, 7);
+    print_order(t);
+
+    free(t);
 
     return 0;
 }
