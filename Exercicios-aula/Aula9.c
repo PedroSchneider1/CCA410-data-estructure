@@ -77,7 +77,6 @@ int main(int argc, char const *argv[]) {
             }
         }
 
-        // coloca 1 nos nós que possuem arestas para outro nó
         for (size_t i = 0; i < n_edges; i++) {
             scanf("%d %d", &p1, &p2);
             edges[p1-1][p2-1] = 1;
@@ -111,7 +110,6 @@ int main(int argc, char const *argv[]) {
             }
         }
 
-        // coloca 1 nos nós que possuem arestas para outro nó
         for (size_t i = 0; i < n_edges; i++) {
             scanf("%d %d %d", &p1, &p2, &weight);
             edges[p1-1][p2-1] = weight;
