@@ -238,7 +238,7 @@ int main(int argc, char const *argv[]) {
     adicionarAresta(grafo, 8, 9); // 9 - 10
 
     if (argc < 2) {
-        printf("Modo de busca não especificado.\n");
+        printf("Modo de busca nao especificado.\n");
         return 1;
     }
 
