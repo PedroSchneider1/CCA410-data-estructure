@@ -35,7 +35,7 @@ void peneirar(heap *h, int pai){
     int left = filho_esq(pai);
     int right = filho_dir(pai);
 
-	if(left < h->qtde && h->valores[left] > h->valores[largest])
+    if(left < h->qtde && h->valores[left] > h->valores[largest])
         largest = left;
     if (right < h->qtde && h->valores[right] > h->valores[largest])
         largest = right;
